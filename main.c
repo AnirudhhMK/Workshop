@@ -1,24 +1,20 @@
-#include <avr/io.h> //for PORTB, PB5, etc
-#include <stdint.h> //for uint8_t etc types
+#include <avr/interrupt.h>
+#include <avr/io.h>
 
-#define Z_VAL 61
+int main(void) {
+  DDRB |= (1 << PB5);
+  TCCR1A =
+      0; // we want CTC mode with no PWM behaviour, so WGM11:0 = 0, COM1A/B = 0
+  TCCR1B =
+      (1 << WGM12) | (1 << CS12) | (1 << CS10); // CTC mode, with prescalar 1024
+  OCR1A = 15624; // TOP = OCR1A = 15624, so the interrupt is called every
+                 // 1024*(15624+1)/(16*10^6) seconds
 
-int main() {
-  DDRB |= (1 << PB5); // set the 5th bit in DDRB to 1
-  uint8_t x = 0xFF;   // starting value of our counter
-  uint8_t y = 0xFF;
-  uint8_t z = Z_VAL; // starting value of the last counter that we can
-                     // manipulate to get a delay of our choice
+  TIMSK1 = (1 << OCIE1A); // Output compare interrupt enable for OCR1A
+
+  sei(); // enable global interupts
   while (1) {
-    for (; z > 0; z--) {
-      for (; y > 0; y--) {
-        for (; x > 0; x--)
-          asm volatile("nop"); // gives a "nop" instruction
-        x = 0xFF;              // reset our counter
-      }
-      y = 0xFF; // reset our counter
-    }
-    z = Z_VAL;           // reset our counter
-    PORTB ^= (1 << PB5); // flip the 5th bit in PORTB (XOR)
   }
 }
+
+ISR(TIMER1_COMPA_vect) { PORTB ^= (1 << PB5); }
