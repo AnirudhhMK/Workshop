@@ -17,4 +17,5 @@ int main(void) {
   }
 }
 
-ISR(TIMER1_COMPA_vect) { PORTB ^= (1 << PB5); }
+void my_own_interrupt(void) __attribute__((__signal__, __used__));
+void my_own_interrupt(void) { PORTB ^= (1 << PB5); }
