@@ -1,0 +1,19 @@
+Arduino IDE code, what is getting uploaded, how? what does the microcontroller do?
+Understanding the Compiler and examine the assembly in godbolt
+intro to MMIO and the datasheet
+Working example by replacing pinMode and digitalWrite, examine the corresponding assembly
+whats a clock cycle, if we know how much time each instruction takes, can we plan out a delay of 1 second?
+intro to timer peripheral, setup timer1 to count 1 second (refer to datasheet)
+intro to interrupts
+
+what is UART
+why do we need a hardware peripheral for it
+configuring UART, baud calculation (datasheet exercise)
+interrupts for UART, intro to a simple ringbuffer
+send Hello World every second
+intro to PWM
+configuring PWM on timer0 (datasheet exercise)
+make an LED fade in and out by keeping track of state
+build a simple command driven embedded system
+
+how does rp2040 compare to atmega328p
